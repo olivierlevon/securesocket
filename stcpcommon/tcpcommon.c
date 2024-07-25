@@ -15,7 +15,7 @@ Abstract:
 
     This file contains common shared routines between the sample secure TCP
     client and secure TCP server. These routines mainly contain sample code for
-    managing custom IPsec policy and querying IPsec SA information using the 
+    managing custom IPsec policy and querying IPsec SA information using the
     FWP API.
 
 --*/
@@ -44,7 +44,7 @@ Routine Description:
 
 Arguments:
 
-    fwpHandle - Pointer that will upon return contain the handle for the 
+    fwpHandle - Pointer that will upon return contain the handle for the
                 FWP session created.
 
     qmPolicyKey - Pointer that will upon return contain the unique
@@ -52,7 +52,7 @@ Arguments:
 
 Return Value:
 
-   Windows error code indicating the status of the operation, or NO_ERROR if 
+   Windows error code indicating the status of the operation, or NO_ERROR if
    the operation succeeded.
 
 --*/
@@ -170,14 +170,14 @@ RemoveCustomIPsecPolicy(
 
 Routine Description:
 
-     This routine removes the customized FWP IPsec quick mode policy from the 
+     This routine removes the customized FWP IPsec quick mode policy from the
      platform and closes the FWP session handle
 
 Arguments:
 
     fwpHandle - Handle for the FWP session
 
-    qmPolicyKey - Pointer to the unique identifier of the quick mode policy 
+    qmPolicyKey - Pointer to the unique identifier of the quick mode policy
                   that was added to the platform
 
 Return Value:
@@ -188,9 +188,9 @@ Return Value:
 {
    GUID zeroGuid = {0};
 
-   if(fwpHandle)
+   if (fwpHandle)
    {
-      if(memcmp(
+      if (memcmp(
             &zeroGuid,
             qmPolicyKey,
             sizeof(GUID)
@@ -214,7 +214,7 @@ PrintQmSa(
 
 Routine Description:
 
-     This routine prints sample information from the QM SA for illustration 
+     This routine prints sample information from the QM SA for illustration
      purposes
 
 Arguments:
@@ -228,7 +228,7 @@ Return Value:
 --*/
 {
    UINT32 i = 0;
-   // Static array containing string description of various encryption 
+   // Static array containing string description of various encryption
    // algorithms
    static const wchar_t* const cipherString[] =
    {
@@ -253,19 +253,19 @@ Return Value:
 
    //-----------------------------------------
    // Print all the SAs in the bundle
-   for(i=0; i<qmSa->outboundSa->saBundle.numSAs; i++)
+   for (i = 0; i < qmSa->outboundSa->saBundle.numSAs; i++)
    {
       sa = &qmSa->outboundSa->saBundle.saList[i];
 
       // For each SA print information based on its type
-      switch(sa->saTransformType)
+      switch (sa->saTransformType)
       {
          case IPSEC_TRANSFORM_AH:
          {
             // Print AH hash algorithm
             authTransformId = 
                &sa->ahInformation->authTransform.authTransformId;
-            if(authTransformId->authType < RTL_NUMBER_OF(hashString))
+            if (authTransformId->authType < RTL_NUMBER_OF(hashString))
             {
                wprintf(L"QM SA AH: Hash %s\n", hashString[authTransformId->authType]);
             }
@@ -276,7 +276,7 @@ Return Value:
             // Print ESP hash algorithm
             authTransformId = 
                &sa->espAuthInformation->authTransform.authTransformId;
-            if(authTransformId->authType < RTL_NUMBER_OF(hashString))
+            if (authTransformId->authType < RTL_NUMBER_OF(hashString))
             {
                wprintf(L"QM SA ESP: Hash %s\n", hashString[authTransformId->authType]);
             }
@@ -287,7 +287,7 @@ Return Value:
             // Print ESP encryption algorithm
             cipherTransformId = 
                &sa->espCipherInformation->cipherTransform.cipherTransformId;
-            if(cipherTransformId->cipherType < RTL_NUMBER_OF(cipherString))
+            if (cipherTransformId->cipherType < RTL_NUMBER_OF(cipherString))
             {
                wprintf(L"QM SA ESP: Encryption %s\n", cipherString[cipherTransformId->cipherType]);
             }
@@ -300,7 +300,7 @@ Return Value:
                &sa->espAuthAndCipherInformation->saAuthInformation.authTransform.authTransformId;
             cipherTransformId = 
                &sa->espAuthAndCipherInformation->saCipherInformation.cipherTransform.cipherTransformId;
-            if((authTransformId->authType < RTL_NUMBER_OF(hashString)) &&
+            if ((authTransformId->authType < RTL_NUMBER_OF(hashString)) &&
                (cipherTransformId->cipherType < RTL_NUMBER_OF(cipherString)))
             {
                wprintf(
@@ -327,7 +327,7 @@ PrintMmSa(
 
 Routine Description:
 
-     This routine prints sample information from the MM SA for illustration 
+     This routine prints sample information from the MM SA for illustration
      purposes
 
 Arguments:
@@ -340,7 +340,7 @@ Return Value:
 
 --*/
 {
-   // Static array containing string description of various encryption 
+   // Static array containing string description of various encryption
    // algorithms
    static const wchar_t* const cipherString[] =
    {
@@ -366,7 +366,7 @@ Return Value:
       L"DH_ECP_256",
       L"DH_ECP_384"
    };
-   // Static array containing string description of various authentication 
+   // Static array containing string description of various authentication
    // methods
    static const wchar_t* const authString[] =
    {
@@ -386,7 +386,7 @@ Return Value:
    wprintf(L"MM SA context ID %I64d\n", mmSa->saId);
 
    // Print MM SA hash, encryption algorithms
-   if((mmSa->ikeProposal.integrityAlgorithm.algoIdentifier < 
+   if ((mmSa->ikeProposal.integrityAlgorithm.algoIdentifier < 
          RTL_NUMBER_OF(hashString)) &&
       (mmSa->ikeProposal.cipherAlgorithm.algoIdentifier < 
          RTL_NUMBER_OF(cipherString)))
@@ -399,13 +399,13 @@ Return Value:
    }
 
    // Print MM SA DH algorithm
-   if(mmSa->ikeProposal.dhGroup < RTL_NUMBER_OF(dhString))
+   if (mmSa->ikeProposal.dhGroup < RTL_NUMBER_OF(dhString))
    {
       wprintf(L"MM SA DH group %s\n", dhString[mmSa->ikeProposal.dhGroup]);
    }
 
    // Print MM SA auth method
-   if(mmSa->ikeCredentials.credentials[0].localCredentials.authenticationMethodType < 
+   if (mmSa->ikeCredentials.credentials[0].localCredentials.authenticationMethodType < 
       RTL_NUMBER_OF(authString))
    {
       wprintf(
@@ -416,7 +416,7 @@ Return Value:
    }
 
    // Print EM auth method (if it exists)
-   if((mmSa->ikeCredentials.numCredentials > 1) &&
+   if ((mmSa->ikeCredentials.numCredentials > 1) &&
       (mmSa->ikeCredentials.credentials[1].localCredentials.authenticationMethodType < 
       RTL_NUMBER_OF(authString)))
    {
@@ -443,7 +443,7 @@ Routine Description:
 Arguments:
 
    qmSa - Pointer to the quick mode SA context
-   matchingFwpFilter - Pointer to the outbound transport layer filter that 
+   matchingFwpFilter - Pointer to the outbound transport layer filter that
                        matched the application traffic
    peerPort - Port corresponding to the peer application
 
@@ -453,17 +453,17 @@ Return Value:
 
 --*/
 {
-   if(!qmSa->outboundSa)
+   if (!qmSa->outboundSa)
    {
       return FALSE;
    }
-   if(qmSa->outboundSa->transportFilter->filterId != 
+   if (qmSa->outboundSa->transportFilter->filterId != 
       matchingFwpFilter->filterId)
    {
       // The filter IDs dont match.
       return FALSE;
    }
-   if(qmSa->outboundSa->traffic.remotePort && 
+   if (qmSa->outboundSa->traffic.remotePort && 
       (qmSa->outboundSa->traffic.remotePort != peerPort))
    {
       // The remote ports dont match.
@@ -483,19 +483,19 @@ MatchIPsecSAsForConnection(
 
 Routine Description:
 
-   This routine finds the IPsec SAs (MM & QM) that match a given connection 
+   This routine finds the IPsec SAs (MM & QM) that match a given connection
    5-tuple (Local address, Remote address, Local port, Remote port, TCP)
 
 Arguments:
 
-   localAddress - Pointer to the socket address that contains local 
+   localAddress - Pointer to the socket address that contains local
                   address, port information
-   peerAddress - Pointer to the socket address that contains peer 
+   peerAddress - Pointer to the socket address that contains peer
                   address, port information
 
 Return Value:
 
-   Windows error code indicating the status of the operation, or NO_ERROR if 
+   Windows error code indicating the status of the operation, or NO_ERROR if
    the operation succeeded.
 
 --*/
@@ -533,14 +533,14 @@ Return Value:
 
    //-----------------------------------------
    // Construct the FWP outbound IPsec transport layer filter enum template
-   if(localAddress->ss_family == AF_INET)
+   if (localAddress->ss_family == AF_INET)
    {
       filterConditions[0].fieldKey = FWPM_CONDITION_IP_LOCAL_ADDRESS;
       filterConditions[0].matchType = FWP_MATCH_EQUAL;
       filterConditions[0].conditionValue.type = FWP_UINT32;
       filterConditions[0].conditionValue.uint32 = 
          ntohl(((struct sockaddr_in*)localAddress)->sin_addr.s_addr);
-      
+
       filterConditions[1].fieldKey = FWPM_CONDITION_IP_REMOTE_ADDRESS;
       filterConditions[1].matchType = FWP_MATCH_EQUAL;
       filterConditions[1].conditionValue.type = FWP_UINT32;
@@ -559,7 +559,7 @@ Return Value:
       filterConditions[0].conditionValue.type = FWP_BYTE_ARRAY16_TYPE;
       filterConditions[0].conditionValue.byteArray16 = 
          (FWP_BYTE_ARRAY16*)&(((struct sockaddr_in6*)localAddress)->sin6_addr);
-      
+
       filterConditions[1].fieldKey = FWPM_CONDITION_IP_REMOTE_ADDRESS;
       filterConditions[1].matchType = FWP_MATCH_EQUAL;
       filterConditions[1].conditionValue.type = FWP_BYTE_ARRAY16_TYPE;
@@ -623,7 +623,7 @@ Return Value:
       goto cleanup;
    }
    // Verify the matching filter
-   if((numEntriesReturned < 1) || 
+   if ((numEntriesReturned < 1) || 
       !(matchingFwpFilter[0]->action.type & FWP_ACTION_FLAG_CALLOUT) ||
       !((memcmp(
             &matchingFwpFilter[0]->action.calloutKey,
@@ -653,7 +653,7 @@ Return Value:
 
    //-----------------------------------------
    // Construct IPsec QM SA enum template
-   if(localAddress->ss_family == AF_INET)
+   if (localAddress->ss_family == AF_INET)
    {
       saEnumTemplate.localSubNet.type = FWP_UINT32;
       saEnumTemplate.localSubNet.uint32 = 
@@ -696,7 +696,7 @@ Return Value:
       wprintf(L"IPsecSaContextEnum0 returned error %ld\n", result);
       goto cleanup;
    }
-   if(numEntriesReturned < 1)
+   if (numEntriesReturned < 1)
    {
       result = ERROR_INVALID_PARAMETER;
       wprintf(L"IPsecSaContextEnum0 didn't return any matching SAs\n");
@@ -705,9 +705,9 @@ Return Value:
 
    //-----------------------------------------
    // Go through the enumerated QM SAs and look for an exact match
-   for(i=0; i<numEntriesReturned; i++)
+   for (i = 0; i < numEntriesReturned; i++)
    {
-      if(IsQmSAExactMatch(
+      if (IsQmSAExactMatch(
             qmSaList[i],
             matchingFwpFilter[0],
             remotePort
@@ -727,7 +727,7 @@ Return Value:
             wprintf(L"IkeextSaGetById0 returned error %ld\n", result);
             goto cleanup;
          }
-         
+
          //-----------------------------------------
          // Print the SAs
          wprintf(L"---------------------\n");
@@ -739,7 +739,7 @@ Return Value:
          FwpmFreeMemory0(&((void*)matchingMmSa));
       }
    }
-   if(!matchingQmSa)
+   if (!matchingQmSa)
    {
       result = ERROR_INVALID_PARAMETER;
       wprintf(L"Didn't find any matching SAs\n");
@@ -747,23 +747,23 @@ Return Value:
    }
 
 cleanup:
-   if(matchingFwpFilter)
+   if (matchingFwpFilter)
    {
       FwpmFreeMemory0(&((void*)matchingFwpFilter));
    }
-   if(qmSaList)
+   if (qmSaList)
    {
       FwpmFreeMemory0(&((void*)qmSaList));
    }
-   if(filterEnumHandle)
+   if (filterEnumHandle)
    {
       FwpmFilterDestroyEnumHandle0(fwpHandle, filterEnumHandle);
    }
-   if(saEnumHandle)
+   if (saEnumHandle)
    {
       IPsecSaContextDestroyEnumHandle0(fwpHandle, saEnumHandle);
    }
-   if(fwpHandle)
+   if (fwpHandle)
    {
       FwpmEngineClose0(fwpHandle);
    }
@@ -787,7 +787,7 @@ Arguments:
 
 Return Value:
 
-   Windows error code indicating the status of the operation, or NO_ERROR if 
+   Windows error code indicating the status of the operation, or NO_ERROR if
    the operation succeeded.
 
 --*/
@@ -800,7 +800,7 @@ Return Value:
    int peerAddrLen = sizeof(SOCKADDR_STORAGE);
 
    //-----------------------------------------
-   // Get local address bound to the socket   
+   // Get local address bound to the socket
    sockErr = getsockname(
                sock,
                (struct sockaddr*)&localAddress,
@@ -812,7 +812,7 @@ Return Value:
       wprintf(L"getsockname returned error %ld\n", result);
       goto cleanup;
    }
-   if(!((localAddress.ss_family == AF_INET) ||
+   if (!((localAddress.ss_family == AF_INET) ||
         (localAddress.ss_family == AF_INET6)))
    {
       result = ERROR_NOT_SUPPORTED;
@@ -821,7 +821,7 @@ Return Value:
    }
 
    //-----------------------------------------
-   // Get peer address bound to the socket   
+   // Get peer address bound to the socket
    sockErr = getpeername(
                sock,
                (struct sockaddr*)&peerAddress,
@@ -835,7 +835,7 @@ Return Value:
    }
 
    //-----------------------------------------
-   // Call the routine to do the match 
+   // Call the routine to do the match
    result = MatchIPsecSAsForConnection(&localAddress, &peerAddress);
    if (result)
    {

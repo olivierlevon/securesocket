@@ -45,8 +45,8 @@ SecureTcpConnect(
 
 Routine Description:
 
-    This routine creates a TCP client socket, securely connects to the 
-    specified server, sends & receives data from the server, and then closes 
+    This routine creates a TCP client socket, securely connects to the
+    specified server, sends & receives data from the server, and then closes
     the socket
 
 Arguments:
@@ -55,7 +55,7 @@ Arguments:
 
     serverAddrLen - length of serverAddr in bytes
 
-    serverSPN - a NULL terminated string representing the SPN 
+    serverSPN - a NULL terminated string representing the SPN
                (service principal name) of the server host computer
 
     securitySettings - pointer to the socket security settings that should be
@@ -65,7 +65,7 @@ Arguments:
 
 Return Value:
 
-    Winsock error code indicating the status of the operation, or NO_ERROR if 
+    Winsock error code indicating the status of the operation, or NO_ERROR if
     the operation succeeded.
 
 --*/
@@ -81,7 +81,7 @@ Return Value:
    DWORD flags = MSG_WAITALL;
    SOCKET_PEER_TARGET_NAME* peerTargetName = NULL;
    DWORD serverSpnStringLen = (DWORD) wcslen(serverSPN);
-   DWORD peerTargetNameLen = sizeof(SOCKET_PEER_TARGET_NAME) + 
+   DWORD peerTargetNameLen = sizeof(SOCKET_PEER_TARGET_NAME) +
                               (serverSpnStringLen * sizeof(wchar_t));
 
    //-----------------------------------------
@@ -103,7 +103,7 @@ Return Value:
 
    //-----------------------------------------
    // Turn on security for the socket.
-   sockErr = WSASetSocketSecurity (
+   sockErr = WSASetSocketSecurity(
                sock,
                securitySettings,
                settingsLen,
@@ -124,7 +124,7 @@ Return Value:
                      HEAP_ZERO_MEMORY,
                      peerTargetNameLen
                      );
-   if(!peerTargetName)
+   if (!peerTargetName)
    {
       result = ERROR_NOT_ENOUGH_MEMORY;
       wprintf(L"Out of memory\n");
@@ -176,7 +176,7 @@ Return Value:
    wprintf(L"Secure connection established to the server\n");
 
    //-----------------------------------------
-   // Match and print IPSec SA information for the connection 
+   // Match and print IPSec SA information for the connection
    // (Note: this is optional)
    result = MatchIPsecSAsForConnectedSocket(sock);
    if (result)
@@ -228,14 +228,14 @@ Return Value:
    wprintf(L"Received %d bytes of data from the server\n", bytesRecvd);
 
 cleanup:
-   if(sock != INVALID_SOCKET)
+   if (sock != INVALID_SOCKET)
    {
       //This will trigger the cleanup of all IPsec filters and policies that
       //were added for this socket. The cleanup will happen only after all
       //outstanding data has been sent out on the wire.
       closesocket(sock);
    }
-   if(peerTargetName)
+   if (peerTargetName)
    {
       HeapFree(GetProcessHeap(), 0, peerTargetName);
    }
@@ -290,25 +290,25 @@ int __cdecl wmain(int argc, const wchar_t* const argv[])
 
    //-----------------------------------------
    // Parse the command line arguments
-   if((argc < 2) || (argc > 4))
+   if ((argc < 2) || (argc > 4))
    {
       // Incorrect usage
       ShowUsage(argv[0]);
       goto cleanup;
    }
-   for(i=1; i<(UINT32)argc; i++)
+   for (i = 1; i < (UINT32)argc; i++)
    {
-      if(_wcsicmp(argv[i], L"-adv") == 0)
+      if (_wcsicmp(argv[i], L"-adv") == 0)
       {
          // Enable advanced mode
          useAdv = TRUE;
       }
-      else if(_wcsicmp(argv[i], L"-v6") == 0)
+      else if (_wcsicmp(argv[i], L"-v6") == 0)
       {
          // Use IPv6
          addrFamily = AF_INET6;
       }
-      else if(_wcsicmp(argv[i], L"/?") == 0)
+      else if (_wcsicmp(argv[i], L"/?") == 0)
       {
          ShowUsage(argv[0]);
          goto cleanup;
@@ -316,19 +316,19 @@ int __cdecl wmain(int argc, const wchar_t* const argv[])
       else
       {
          //server name.
-         if(!serverHostDnsName)
+         if (!serverHostDnsName)
          {
             serverHostDnsName = (wchar_t*)argv[i];
          }
       }
    }
-   if(!serverHostDnsName)
+   if (!serverHostDnsName)
    {
       // Incorrect usage
       ShowUsage(argv[0]);
       goto cleanup;
    }
-   if(wcslen(serverHostDnsName) > MAX_PATH)
+   if (wcslen(serverHostDnsName) > MAX_PATH)
    {
       wprintf(L"DNS name is too large\n");
       goto cleanup;
@@ -375,13 +375,13 @@ int __cdecl wmain(int argc, const wchar_t* const argv[])
                &serverSPNLen,
                serverSPN
             );
-   if(result)
+   if (result)
    {
       wprintf(L"DsMakeSpn returned error %ld\n", result);
       goto cleanup;
    }
 
-   if(useAdv)
+   if (useAdv)
    {
       //-----------------------------------------
       // Construct advanced socket security settings
@@ -397,7 +397,7 @@ int __cdecl wmain(int argc, const wchar_t* const argv[])
          wprintf(L"AddCustomIPsecPolicy returned error %ld\n", result);
          goto cleanup;
       }
-      // Cast the (SOCKET_SECURITY_SETTINGS_IPSEC*) to 
+      // Cast the (SOCKET_SECURITY_SETTINGS_IPSEC*) to
       // (SOCKET_SECURITY_SETTINGS*) and set the length appropriately.
       settings = (SOCKET_SECURITY_SETTINGS*)&advSettings;
       settingsLen = sizeof(advSettings);
@@ -433,15 +433,15 @@ int __cdecl wmain(int argc, const wchar_t* const argv[])
    wprintf(L"Finished\n");
 
 cleanup:
-   if(useAdv)
+   if (useAdv)
    {
       RemoveCustomIPsecPolicy(fwpHandle, &advSettings.AuthipQMPolicyKey);
    }
-   if(aiList)
+   if (aiList)
    {
       FreeAddrInfoW(aiList);
    }
-   if(wsaCleanup)
+   if (wsaCleanup)
    {
       WSACleanup();
    }

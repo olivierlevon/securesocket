@@ -15,13 +15,12 @@ Abstract:
 
     This file defines common shared routines between the sample secure TCP
     client and secure TCP server. These routines mainly contain sample code for
-    managing custom IPsec policy and querying IPsec SA information using the 
+    managing custom IPsec policy and querying IPsec SA information using the
     FWP API.
 
 --*/
 
-#ifndef _TCP_COMMON_H_
-#define _TCP_COMMON_H_
+
 #pragma once
 
 #include <windows.h>
@@ -47,6 +46,4 @@ MatchIPsecSAsForConnectedSocket(
 );
 
 #define RECV_DATA_BUF_SIZE 256
-
-#endif //_TCP_COMMON_H_
 

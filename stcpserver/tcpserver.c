@@ -102,7 +102,7 @@ Return Value:
 
    //-----------------------------------------
    // Turn on security for the socket.
-   sockErr = WSASetSocketSecurity (
+   sockErr = WSASetSocketSecurity(
                listenSock,
                securitySettings,
                settingsLen,
@@ -118,7 +118,7 @@ Return Value:
 
    //-----------------------------------------
    // Bind the socket to the server port
-   if(addrFamily == AF_INET)
+   if (addrFamily == AF_INET)
    {
       v4Addr.sin_family = AF_INET;
       v4Addr.sin_port = htons(SERVER_PORT);
@@ -169,7 +169,7 @@ Return Value:
       if (clientSock == INVALID_SOCKET)
       {
          result = WSAGetLastError();
-         wprintf(L"WSAAccept returned error %ld\n", result); \
+         wprintf(L"WSAAccept returned error %ld\n", result);
          goto cleanup;
       }
       wprintf(L"Connected to a client\n");
@@ -207,7 +207,7 @@ Return Value:
 
       //-----------------------------------------
       // Impersonate the client
-      sockErr = WSAImpersonateSocketPeer (
+      sockErr = WSAImpersonateSocketPeer(
                   clientSock,
                   NULL,
                   0
@@ -272,11 +272,11 @@ cleanup:
    //Note this will trigger the cleanup of all IPsec filters and policies that
    //were added for this socket. The cleanup will happen only after all
    //outstanding data has been sent out on the wire.
-   if(clientSock != INVALID_SOCKET)
+   if (clientSock != INVALID_SOCKET)
    {
       closesocket(clientSock);
    }
-   if(listenSock != INVALID_SOCKET)
+   if (listenSock != INVALID_SOCKET)
    {
       closesocket(listenSock);
    }
@@ -323,21 +323,21 @@ int __cdecl wmain(int argc, const wchar_t* const argv[])
 
    //-----------------------------------------
    // Parse the command line arguments
-   if(argc > 3)
+   if (argc > 3)
    {
       // Incorrect usage
       ShowUsage(argv[0]);
       goto cleanup;
    }
 
-   for(i=1; i<(UINT32)argc; i++)
+   for (i = 1; i < (UINT32)argc; i++)
    {
-      if(_wcsicmp(argv[i], L"-adv") == 0)
+      if (_wcsicmp(argv[i], L"-adv") == 0)
       {
          // Enable advanced mode
          useAdv = TRUE;
       }
-      else if(_wcsicmp(argv[i], L"-v6") == 0)
+      else if (_wcsicmp(argv[i], L"-v6") == 0)
       {
          // Use IPv6
          addrFamily = AF_INET6;
@@ -360,7 +360,7 @@ int __cdecl wmain(int argc, const wchar_t* const argv[])
    // Set flag to indicate that WSACleanup() should be called.
    wsaCleanup = TRUE;
 
-   if(useAdv)
+   if (useAdv)
    {
       //-----------------------------------------
       // Construct advanced socket security settings
@@ -410,11 +410,11 @@ int __cdecl wmain(int argc, const wchar_t* const argv[])
    wprintf(L"Finished\n");
 
 cleanup:
-   if(useAdv)
+   if (useAdv)
    {
       RemoveCustomIPsecPolicy(fwpHandle, &advSettings.AuthipQMPolicyKey);
    }
-   if(wsaCleanup)
+   if (wsaCleanup)
    {
       WSACleanup();
    }
