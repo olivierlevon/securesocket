@@ -46,12 +46,12 @@ SecureTcpAcceptConnection(
 Routine Description:
 
     This routine creates a TCP server socket, securely accepts connections from
-    clients, impersonates the client for access checks, and securely 
+    clients, impersonates the client for access checks, and securely
     sends & receives data from the client
 
 Arguments:
 
-    addrFamily - Winsock address family that should be used for creating the 
+    addrFamily - Winsock address family that should be used for creating the
                  socket.
     securitySettings - pointer to the socket security settings that should be
                        applied to the socket
@@ -60,7 +60,7 @@ Arguments:
 
 Return Value:
 
-    Winsock error code indicating the status of the operation, or NO_ERROR if 
+    Winsock error code indicating the status of the operation, or NO_ERROR if
     the operation succeeded.
 
 --*/
@@ -83,7 +83,7 @@ Return Value:
    //-----------------------------------------
    // Create a TCP socket
    //
-   // Choosing IPv4 for illustration purposes. Otherwise with minor tweaks the 
+   // Choosing IPv4 for illustration purposes. Otherwise with minor tweaks the
    // sample code should work for IPv6 as well.
    listenSock = WSASocket(
                   addrFamily,
@@ -133,7 +133,7 @@ Return Value:
       addrLen = sizeof(v6Addr);
    }
    sockErr = bind(
-               listenSock, 
+               listenSock,
                addr,
                addrLen
             );
@@ -166,7 +166,7 @@ Return Value:
                      NULL,
                      0
                    );
-      if (listenSock == INVALID_SOCKET)
+      if (clientSock == INVALID_SOCKET)
       {
          result = WSAGetLastError();
          wprintf(L"WSAAccept returned error %ld\n", result); \
@@ -175,7 +175,7 @@ Return Value:
       wprintf(L"Connected to a client\n");
 
       //-----------------------------------------
-      // Match and print IPSec SA information for the connection 
+      // Match and print IPSec SA information for the connection
       // (Note: this is optional)
       result = MatchIPsecSAsForConnectedSocket(clientSock);
       if (result)
@@ -206,7 +206,7 @@ Return Value:
       wprintf(L"Received %d bytes of data from the client\n", bytesRecvd);
 
       //-----------------------------------------
-      // Impersonate the client 
+      // Impersonate the client
       sockErr = WSAImpersonateSocketPeer (
                   clientSock,
                   NULL,
@@ -220,18 +220,18 @@ Return Value:
       }
       wprintf(L"Impersonating the client\n");
 
-      //    At this point the server is impersonating the client and can access 
+      //    At this point the server is impersonating the client and can access
       // requested resources (such as files, etc) on behalf of the client.
       // This will ensure that all access controls associated with the
-      // resources will be enforced for the client. If access checks fail, 
+      // resources will be enforced for the client. If access checks fail,
       // server should fail the connection.
-      //    However if the server wants to instead perform access checks 
+      //    However if the server wants to instead perform access checks
       // against an explicit security descriptor, then instead of impersonating
-      // the client, it should get a handle to the client access token using 
+      // the client, it should get a handle to the client access token using
       // WSAQuerySocketSecurity().
-      
+
       //-----------------------------------------
-      // Revert the impersonation 
+      // Revert the impersonation
       sockErr = WSARevertImpersonation();
       if (sockErr == SOCKET_ERROR)
       {
@@ -306,7 +306,7 @@ Return Value:
 }
 
 int __cdecl wmain(int argc, const wchar_t* const argv[])
-{	
+{
    DWORD result = 0;
    BOOL success = TRUE;
    WSADATA data;
@@ -376,7 +376,7 @@ int __cdecl wmain(int argc, const wchar_t* const argv[])
          wprintf(L"AddCustomIPsecPolicy returned error %ld\n", result);
          goto cleanup;
       }
-      // Cast the (SOCKET_SECURITY_SETTINGS_IPSEC*) to 
+      // Cast the (SOCKET_SECURITY_SETTINGS_IPSEC*) to
       // (SOCKET_SECURITY_SETTINGS*) and set the length appropriately.
       settings = (SOCKET_SECURITY_SETTINGS*)&advSettings;
       settingsLen = sizeof(advSettings);
