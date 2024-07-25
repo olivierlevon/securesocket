@@ -22,6 +22,9 @@ Abstract:
 #define UNICODE
 #endif
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <rpc.h>
 #include <ntdsapi.h>
 #include <wchar.h>
@@ -94,10 +97,10 @@ Return Value:
    if (sock == INVALID_SOCKET)
    {
       result = WSAGetLastError();
-      wprintf(L"WSASocket returned error %ld\n", result); \
+      wprintf(L"WSASocket returned error %ld\n", result);
       goto cleanup;
    }
-   
+
    //-----------------------------------------
    // Turn on security for the socket.
    sockErr = WSASetSocketSecurity (
@@ -129,7 +132,7 @@ Return Value:
    }
    // Use the security protocol as specified by the settings
    peerTargetName->SecurityProtocol = securitySettings->SecurityProtocol;
-   // Specify the server SPN 
+   // Specify the server SPN
    peerTargetName->PeerTargetNameStringLen = serverSpnStringLen;
    RtlCopyMemory(
       (BYTE*)peerTargetName->AllStrings,
@@ -263,7 +266,7 @@ Return Value:
 }
 
 int __cdecl wmain(int argc, const wchar_t* const argv[])
-{	
+{
    DWORD result = 0;
    WSADATA data;
    WORD version = MAKEWORD(2, 2);

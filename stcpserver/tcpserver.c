@@ -22,6 +22,9 @@ Abstract:
 #define UNICODE
 #endif
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <rpc.h>
 #include <ntdsapi.h>
 #include <wchar.h>
@@ -93,7 +96,7 @@ Return Value:
    if (listenSock == INVALID_SOCKET)
    {
       result = WSAGetLastError();
-      wprintf(L"WSASocket returned error %ld\n", result); \
+      wprintf(L"WSASocket returned error %ld\n", result);
       goto cleanup;
    }
 
@@ -150,7 +153,7 @@ Return Value:
       wprintf(L"listen returned error %ld\n", result);
       goto cleanup;
    }
-   
+
    while(TRUE)
    {
       //-----------------------------------------
