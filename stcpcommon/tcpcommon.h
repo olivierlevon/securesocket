@@ -23,10 +23,7 @@ Abstract:
 
 #pragma once
 
-#include <windows.h>
-#include <fwpmu.h>
-#include <Winsock2.h>
-#include <nldef.h>
+#define RECV_DATA_BUF_SIZE 256
 
 DWORD
 AddCustomIPsecPolicy(
@@ -45,5 +42,5 @@ MatchIPsecSAsForConnectedSocket(
    IN SOCKET sock
 );
 
-#define RECV_DATA_BUF_SIZE 256
+
 

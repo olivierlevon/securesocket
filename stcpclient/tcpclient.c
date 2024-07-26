@@ -18,19 +18,8 @@ Abstract:
 
 --*/
 
-#ifndef UNICODE
-#define UNICODE
-#endif
+#include <pch.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <rpc.h>
-#include <ntdsapi.h>
-#include <wchar.h>
-#include <Winsock2.h>
-#include <mstcpip.h>
-#include <ws2tcpip.h>
 #include "Tcpcommon.h"
 
 DWORD

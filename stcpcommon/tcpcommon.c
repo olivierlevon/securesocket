@@ -20,14 +20,8 @@ Abstract:
 
 --*/
 
-#ifndef UNICODE
-#define UNICODE
-#endif
+#include <pch.h>
 
-#include <wchar.h>
-#include <Winsock2.h>
-#include <mstcpip.h>
-#include <ws2tcpip.h>
 #include "Tcpcommon.h"
 
 DWORD
@@ -263,7 +257,7 @@ Return Value:
          case IPSEC_TRANSFORM_AH:
          {
             // Print AH hash algorithm
-            authTransformId = 
+            authTransformId =
                &sa->ahInformation->authTransform.authTransformId;
             if (authTransformId->authType < RTL_NUMBER_OF(hashString))
             {
@@ -274,7 +268,7 @@ Return Value:
          case IPSEC_TRANSFORM_ESP_AUTH:
          {
             // Print ESP hash algorithm
-            authTransformId = 
+            authTransformId =
                &sa->espAuthInformation->authTransform.authTransformId;
             if (authTransformId->authType < RTL_NUMBER_OF(hashString))
             {
@@ -285,7 +279,7 @@ Return Value:
          case IPSEC_TRANSFORM_ESP_CIPHER:
          {
             // Print ESP encryption algorithm
-            cipherTransformId = 
+            cipherTransformId =
                &sa->espCipherInformation->cipherTransform.cipherTransformId;
             if (cipherTransformId->cipherType < RTL_NUMBER_OF(cipherString))
             {
@@ -296,9 +290,9 @@ Return Value:
          case IPSEC_TRANSFORM_ESP_AUTH_AND_CIPHER:
          {
             // Print ESP hash & encryption algorithm
-            authTransformId = 
+            authTransformId =
                &sa->espAuthAndCipherInformation->saAuthInformation.authTransform.authTransformId;
-            cipherTransformId = 
+            cipherTransformId =
                &sa->espAuthAndCipherInformation->saCipherInformation.cipherTransform.cipherTransformId;
             if ((authTransformId->authType < RTL_NUMBER_OF(hashString)) &&
                (cipherTransformId->cipherType < RTL_NUMBER_OF(cipherString)))
@@ -386,13 +380,13 @@ Return Value:
    wprintf(L"MM SA context ID %I64d\n", mmSa->saId);
 
    // Print MM SA hash, encryption algorithms
-   if ((mmSa->ikeProposal.integrityAlgorithm.algoIdentifier < 
+   if ((mmSa->ikeProposal.integrityAlgorithm.algoIdentifier <
          RTL_NUMBER_OF(hashString)) &&
-      (mmSa->ikeProposal.cipherAlgorithm.algoIdentifier < 
+      (mmSa->ikeProposal.cipherAlgorithm.algoIdentifier <
          RTL_NUMBER_OF(cipherString)))
    {
       wprintf(
-         L"MM SA Hash %s, Encryption %s\n", 
+         L"MM SA Hash %s, Encryption %s\n",
          hashString[mmSa->ikeProposal.integrityAlgorithm.algoIdentifier],
          cipherString[mmSa->ikeProposal.cipherAlgorithm.algoIdentifier]
          );
@@ -405,11 +399,11 @@ Return Value:
    }
 
    // Print MM SA auth method
-   if (mmSa->ikeCredentials.credentials[0].localCredentials.authenticationMethodType < 
+   if (mmSa->ikeCredentials.credentials[0].localCredentials.authenticationMethodType <
       RTL_NUMBER_OF(authString))
    {
       wprintf(
-         L"MM SA Auth method %s\n", 
+         L"MM SA Auth method %s\n",
          authString[
             mmSa->ikeCredentials.credentials[0].localCredentials.authenticationMethodType]
       );
@@ -417,11 +411,11 @@ Return Value:
 
    // Print EM auth method (if it exists)
    if ((mmSa->ikeCredentials.numCredentials > 1) &&
-      (mmSa->ikeCredentials.credentials[1].localCredentials.authenticationMethodType < 
+      (mmSa->ikeCredentials.credentials[1].localCredentials.authenticationMethodType <
       RTL_NUMBER_OF(authString)))
    {
       wprintf(
-         L"MM SA EM Auth method %s\n", 
+         L"MM SA EM Auth method %s\n",
          authString[
             mmSa->ikeCredentials.credentials[1].localCredentials.authenticationMethodType]
       );
@@ -457,13 +451,13 @@ Return Value:
    {
       return FALSE;
    }
-   if (qmSa->outboundSa->transportFilter->filterId != 
+   if (qmSa->outboundSa->transportFilter->filterId !=
       matchingFwpFilter->filterId)
    {
       // The filter IDs dont match.
       return FALSE;
    }
-   if (qmSa->outboundSa->traffic.remotePort && 
+   if (qmSa->outboundSa->traffic.remotePort &&
       (qmSa->outboundSa->traffic.remotePort != peerPort))
    {
       // The remote ports dont match.
@@ -538,13 +532,13 @@ Return Value:
       filterConditions[0].fieldKey = FWPM_CONDITION_IP_LOCAL_ADDRESS;
       filterConditions[0].matchType = FWP_MATCH_EQUAL;
       filterConditions[0].conditionValue.type = FWP_UINT32;
-      filterConditions[0].conditionValue.uint32 = 
+      filterConditions[0].conditionValue.uint32 =
          ntohl(((struct sockaddr_in*)localAddress)->sin_addr.s_addr);
 
       filterConditions[1].fieldKey = FWPM_CONDITION_IP_REMOTE_ADDRESS;
       filterConditions[1].matchType = FWP_MATCH_EQUAL;
       filterConditions[1].conditionValue.type = FWP_UINT32;
-      filterConditions[1].conditionValue.uint32 = 
+      filterConditions[1].conditionValue.uint32 =
          ntohl(((struct sockaddr_in*)peerAddress)->sin_addr.s_addr);
 
       layerKey = &FWPM_LAYER_OUTBOUND_TRANSPORT_V4;
@@ -557,13 +551,13 @@ Return Value:
       filterConditions[0].fieldKey = FWPM_CONDITION_IP_LOCAL_ADDRESS;
       filterConditions[0].matchType = FWP_MATCH_EQUAL;
       filterConditions[0].conditionValue.type = FWP_BYTE_ARRAY16_TYPE;
-      filterConditions[0].conditionValue.byteArray16 = 
+      filterConditions[0].conditionValue.byteArray16 =
          (FWP_BYTE_ARRAY16*)&(((struct sockaddr_in6*)localAddress)->sin6_addr);
 
       filterConditions[1].fieldKey = FWPM_CONDITION_IP_REMOTE_ADDRESS;
       filterConditions[1].matchType = FWP_MATCH_EQUAL;
       filterConditions[1].conditionValue.type = FWP_BYTE_ARRAY16_TYPE;
-      filterConditions[1].conditionValue.byteArray16 = 
+      filterConditions[1].conditionValue.byteArray16 =
          (FWP_BYTE_ARRAY16*)&(((struct sockaddr_in6*)peerAddress)->sin6_addr);
 
       layerKey = &FWPM_LAYER_OUTBOUND_TRANSPORT_V6;
@@ -623,7 +617,7 @@ Return Value:
       goto cleanup;
    }
    // Verify the matching filter
-   if ((numEntriesReturned < 1) || 
+   if ((numEntriesReturned < 1) ||
       !(matchingFwpFilter[0]->action.type & FWP_ACTION_FLAG_CALLOUT) ||
       !((memcmp(
             &matchingFwpFilter[0]->action.calloutKey,
@@ -656,19 +650,19 @@ Return Value:
    if (localAddress->ss_family == AF_INET)
    {
       saEnumTemplate.localSubNet.type = FWP_UINT32;
-      saEnumTemplate.localSubNet.uint32 = 
+      saEnumTemplate.localSubNet.uint32 =
          ntohl(((struct sockaddr_in*)localAddress)->sin_addr.s_addr);
       saEnumTemplate.remoteSubNet.type = FWP_UINT32;
-      saEnumTemplate.remoteSubNet.uint32 = 
+      saEnumTemplate.remoteSubNet.uint32 =
          ntohl(((struct sockaddr_in*)peerAddress)->sin_addr.s_addr);
    }
    else
    {
       saEnumTemplate.localSubNet.type = FWP_BYTE_ARRAY16_TYPE;
-      saEnumTemplate.localSubNet.byteArray16 = 
+      saEnumTemplate.localSubNet.byteArray16 =
          (FWP_BYTE_ARRAY16*)&(((struct sockaddr_in6*)localAddress)->sin6_addr);
       saEnumTemplate.remoteSubNet.type = FWP_BYTE_ARRAY16_TYPE;
-      saEnumTemplate.remoteSubNet.byteArray16 = 
+      saEnumTemplate.remoteSubNet.byteArray16 =
          (FWP_BYTE_ARRAY16*)&(((struct sockaddr_in6*)peerAddress)->sin6_addr);
    }
 

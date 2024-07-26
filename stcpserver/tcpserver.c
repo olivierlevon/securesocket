@@ -18,19 +18,8 @@ Abstract:
 
 --*/
 
-#ifndef UNICODE
-#define UNICODE
-#endif
+#include <pch.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <rpc.h>
-#include <ntdsapi.h>
-#include <wchar.h>
-#include <Winsock2.h>
-#include <mstcpip.h>
-#include <ws2tcpip.h>
 #include "Tcpcommon.h"
 
 #define SERVER_PORT 27015
@@ -154,7 +143,7 @@ Return Value:
       goto cleanup;
    }
 
-   while(TRUE)
+   while (TRUE)
    {
       //-----------------------------------------
       // Wait for client to connect
@@ -420,4 +409,3 @@ cleanup:
    }
    return result;
 }
-

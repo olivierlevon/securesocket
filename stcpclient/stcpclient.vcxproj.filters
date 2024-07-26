@@ -18,9 +18,15 @@
     <ClCompile Include="tcpclient.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\stcpcommon\pch.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\stcpcommon\tcpcommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\stcpcommon\pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
